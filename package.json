@@ -1,6 +1,6 @@
 {
 	"name": "jq-cascader",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"description": "jquery cascader component",
 	"main": "index.js",
 	"bin": "./lib/cascader.js",

@@ -28,10 +28,32 @@
 			<div class="top">
 				<form>
 					<div id="cascader"></div>
+					<pre>
+						const cas = new Cascader({
+							container: '#cascader',
+							data: list,
+							selectFn: (val) => {
+								console.log('你选择了', val);
+							},
+						});
+					</pre
+					>
 				</form>
 			</div>
 			<div class="bottom">
+				<p>包含初始化值的</p>
 				<form id="form"></form>
+				<pre>
+					const cas2 = new Cascader({
+						data: list,
+						selectFn: (val) => {
+							console.log('你选择了', val);
+						},
+						value: 'zujian.form.input',
+					});
+					$('#form').append(cas2.$el);
+				</pre
+				>
 			</div>
 		</div>
 		<script src="./lib/jquery.min.js"></script>
