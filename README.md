@@ -297,3 +297,7 @@ const cas2 = new Cascader({
 });
 $('#form').append(cas2.$el); // 如果初始化时不指定container,则自己将$el挂载在需要的dom上
 ```
+
+## Demo
+
+[演示地址](https://lz82.github.io/jq-cascader/)
