@@ -136,6 +136,8 @@ export default class Cascader {
 
 		$('html').bind('click', this.htmlClickHandler.bind(this));
 
+		this.setInitVal();
+
 		return this.$el;
 	}
 
@@ -315,7 +317,7 @@ export default class Cascader {
 
 	createSearchdlist(data, label) {
 		for (var i in data) {
-			if (data[i].label.toLocaleLowerCase() == label) {
+			if (data[i].label.toLocaleLowerCase() == label.toLocaleLowerCase()) {
 				this.searActiveArr = data[i].children;
 			}
 		}
@@ -325,7 +327,7 @@ export default class Cascader {
 	highlighting(jqElArr, highStr) {
 		jqElArr.each((i, item) => {
 			var curtxt = $(item).attr('data-label').toLocaleLowerCase();
-			if (highStr == curtxt) {
+			if (highStr.toLocaleLowerCase() == curtxt) {
 				var selectedItem = $(item);
 				$(item).addClass('on').siblings().removeClass('on');
 				this.scrollToOpened(selectedItem);
@@ -345,43 +347,49 @@ export default class Cascader {
 		}
 	}
 
+	getLabelByVal(val, data) {
+		return data.find((currentLv) => currentLv.value === val);
+	}
+
+	// 如果传入初值，则设置初始状态
 	setInitVal() {
-		if (opts.value) {
-			let valArr = opts.value.split('.');
+		if (this.value) {
+			let valArr = this.value.split('.');
 			let ret = [];
 			let searStr = [];
 			for (i = 0; i < valArr.length; i++) {
 				if (ret.length) {
-					const temp = getLabelByVal(valArr[i], ret[ret.length - 1].children);
+					const temp = this.getLabelByVal(valArr[i], ret[ret.length - 1].children);
 					ret.push(temp);
 					searStr.push(temp.label);
 				} else {
-					const temp = getLabelByVal(valArr[i], opts.data);
+					const temp = this.getLabelByVal(valArr[i], this.data);
 					ret.push(temp);
 					searStr.push(temp.label);
 				}
 			}
-			let litxt = dlist.find('.dlist_ul').eq(0),
-				len = searStr.length;
+			let litxt = this.list.find('.ui-cascader-menu').eq(0);
+			let len = searStr.length;
 
 			litxt.nextAll().remove();
 
-			createUl(opts.data);
-			initData = true;
-			console.log('init', initData);
-			createSearchdlist(opts.data, searStr[0]);
+			if (!this.initData) {
+				this.createUl(this.data);
+				this.initData = true;
+			}
+
+			this.createSearchdlist(this.data, searStr[0]);
 
 			for (var i = 1; i < len - 1; i++) {
-				createSearchdlist(searActiveArr, searStr[i]);
+				this.createSearchdlist(this.searActiveArr, searStr[i]);
 			}
-			dlist.find('.dlist_ul').each(function (i) {
-				var jqElArr = $(this).find('li');
-				highlighting(jqElArr, searStr[i]);
+			this.list.find('.ui-cascader-menu').each((i, item) => {
+				var jqElArr = $(item).find('li');
+
+				this.highlighting(jqElArr, searStr[i]);
 				if (i == len - 1) {
-					getValue();
-					labelshow.removeClass('hid');
-					searchtxt.val('');
-					popClose();
+					this.getValue();
+					this.popClose();
 				}
 			});
 		}
