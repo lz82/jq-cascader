@@ -1,0 +1,29 @@
+{
+	"name": "cascader-selector",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"dev": "webpack -w"
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"@babel/core": "^7.12.10",
+		"@babel/preset-env": "^7.12.11",
+		"babel-loader": "^8.2.2",
+		"css-loader": "^5.0.1",
+		"file-loader": "^6.2.0",
+		"html-webpack-plugin": "^4.5.1",
+		"jquery": "^1.12.4",
+		"less": "^4.1.1",
+		"less-loader": "^8.0.0",
+		"style-loader": "^2.0.0",
+		"url-loader": "^4.1.1",
+		"webpack": "^5.14.0"
+	},
+	"devDependencies": {
+		"webpack-cli": "^4.3.1"
+	}
+}
