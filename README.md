@@ -294,6 +294,7 @@ const cas2 = new Cascader({
 	selectFn: (val) => {
 		console.log('你选择了', val);
 	},
+	value: 'zujian.form.input', // 有初始值时
 });
 $('#form').append(cas2.$el); // 如果初始化时不指定container,则自己将$el挂载在需要的dom上
 ```
