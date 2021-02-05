@@ -41,7 +41,7 @@ export default class Cascader {
 	init() {
 		this.$el = $(`<div class="ui-cascader">
 									<div class="ui-cascader-input">
-										<span class="arrdown"></span>
+										<span class="arrow"></span>
 										<input autocomplete="off" class="searchtxt" type="text" placeholder="${this.placeholder}" />
 									</div>
 									<div class="ui-cascader-dropdown panel hid">
@@ -55,6 +55,7 @@ export default class Cascader {
 		}
 		this.input = this.$el.find('.ui-cascader-input');
 		this.inputDom = this.input.find('input');
+		this.arrow = this.input.find('.arrow');
 		this.list = this.$el.find('.ui-cascader-dropdown.panel');
 		this.searchedList = this.$el.find('.ui-cascader-dropdown.searchedlist');
 
@@ -143,6 +144,9 @@ export default class Cascader {
 
 	// 弹出
 	popOpen(el) {
+		// 修改箭头样式
+		this.arrow.addClass('on');
+
 		const windowHeight = $(window).height(); // 屏幕高度
 		const comHeight = this.$el.height(); // 组件高度（input)
 		const comTop = this.input.offset().top; // 组件（input）到顶部到距离（包括滚动条滚动到部分）
@@ -175,6 +179,7 @@ export default class Cascader {
 	// 关闭
 	popClose() {
 		this.$el.find('.ui-cascader-dropdown').addClass('hid');
+		this.arrow.removeClass('on');
 	}
 
 	getArray(data, value) {
