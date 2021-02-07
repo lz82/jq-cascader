@@ -207,7 +207,7 @@ export default class Cascader {
 		};
 	}
 
-	getValue() {
+	getValue(isClick = true) {
 		let selJson = []; /* 最终选项数组 */
 		this.list.find('li.on').each(function (i, data) {
 			var label = $(this).attr('data-label'),
@@ -221,7 +221,7 @@ export default class Cascader {
 			label,
 			value,
 		};
-		this.selectFn(selJson);
+		isClick && this.selectFn(selJson);
 	}
 
 	createUl(data) {
@@ -393,7 +393,7 @@ export default class Cascader {
 
 				this.highlighting(jqElArr, searStr[i]);
 				if (i == len - 1) {
-					this.getValue();
+					this.getValue(false);
 					this.popClose();
 				}
 			});
