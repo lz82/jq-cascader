@@ -44,10 +44,6 @@ export default class Cascader {
 										<span class="arrow"></span>
 										<input autocomplete="off" class="searchtxt" type="text" placeholder="${this.placeholder}" />
 									</div>
-									<div class="ui-cascader-dropdown panel hid">
-									</div>
-									<div class="ui-cascader-dropdown searchedlist hid">
-									</div>
 								</div>`);
 		if (this.container) {
 			this.container.html('');
@@ -56,8 +52,11 @@ export default class Cascader {
 		this.input = this.$el.find('.ui-cascader-input');
 		this.inputDom = this.input.find('input');
 		this.arrow = this.input.find('.arrow');
-		this.list = this.$el.find('.ui-cascader-dropdown.panel');
-		this.searchedList = this.$el.find('.ui-cascader-dropdown.searchedlist');
+		this.list = $(`	<div class="ui-cascader ui-cascader-dropdown panel hid"></div>`);
+		this.searchedList = $(`<div class="ui-cascader ui-cascader-dropdown searchedlist hid"></div>`);
+
+		$(document.body).append(this.list);
+		$(document.body).append(this.searchedList);
 
 		// input点击 弹出
 		this.input.bind('click', () => {
@@ -150,6 +149,7 @@ export default class Cascader {
 		const windowHeight = $(window).height(); // 屏幕高度
 		const comHeight = this.$el.height(); // 组件高度（input)
 		const comTop = this.input.offset().top; // 组件（input）到顶部到距离（包括滚动条滚动到部分）
+		const comLeft = this.input.offset().left;
 		const scrollBarHeight = $(document).scrollTop(); // 滚动条到高度（即页面滚动进去到距离）
 		let height = 0; // 弹出框到高度
 
@@ -158,18 +158,22 @@ export default class Cascader {
 		if (el) {
 			height = $(el).height(); // 弹出框的高度
 			if (windowHeight - (comTop - scrollBarHeight + comHeight + height) < 10) {
-				$(el).css('top', `-${height + 5}px`);
+				$(el).css('top', `${comTop - height - 5}px`);
+				$(el).css('left', `${comLeft}px`);
 			} else {
-				$(el).css('top', '100%');
+				$(el).css('top', `${comTop + comHeight}px`);
+				$(el).css('left', `${comLeft}px`);
 			}
 			$(el).css('zIndex', zIndex + 1);
 			el.removeClass('hid');
 		} else {
 			height = this.list.height(); // 弹出框的高度
 			if (windowHeight - (comTop - scrollBarHeight + comHeight + height) < 10) {
-				this.list.css('top', `-${height + 5}px`);
+				this.list.css('top', `-${comTop - height - 5}px`);
+				this.list.css('left', `${comLeft}px`);
 			} else {
-				this.list.css('top', '100%');
+				this.list.css('top', `${comTop + comHeight}px`);
+				this.list.css('left', `${comLeft}px`);
 			}
 			this.list.css('zIndex', zIndex + 1);
 			this.list.removeClass('hid');
@@ -178,7 +182,13 @@ export default class Cascader {
 
 	// 关闭
 	popClose() {
-		this.$el.find('.ui-cascader-dropdown').addClass('hid');
+		if (!this.list.hasClass('hid')) {
+			this.list.addClass('hid');
+		}
+
+		if (!this.searchedList.hasClass('hid')) {
+			this.searchedList.addClass('hid');
+		}
 		this.arrow.removeClass('on');
 	}
 
@@ -225,6 +235,9 @@ export default class Cascader {
 	}
 
 	createUl(data) {
+		if (!data) {
+			return;
+		}
 		let arr = data;
 		let liArr = [];
 
@@ -243,12 +256,12 @@ export default class Cascader {
 	createEl() {
 		if (this.curArr) {
 			/*  点击非最后一个子级 */
-			this.$el.find('.ui-cascader-menu').eq(this.level).nextAll().remove();
+			this.list.find('.ui-cascader-menu').eq(this.level).nextAll().remove();
 			this.createUl(this.curArr);
 			this.popOpen();
 		} else {
 			/* 点击最后一个子级 */
-			this.$el.find('.ui-cascader-menu').eq(this.level).nextAll().remove();
+			this.list.find('.ui-cascader-menu').eq(this.level).nextAll().remove();
 			this.getValue();
 			this.popClose();
 		}
@@ -267,6 +280,7 @@ export default class Cascader {
 
 	// 如果点击的不是组件范围，则关闭组件
 	htmlClickHandler(e) {
+		debugger;
 		if (this.list.hasClass('hid') && this.searchedList.hasClass('hid')) return;
 
 		var cascader = $(e.target).parents('.ui-cascader');
