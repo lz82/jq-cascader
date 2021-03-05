@@ -28,6 +28,7 @@
 		"less-loader": "^8.0.0",
 		"style-loader": "^2.0.0",
 		"url-loader": "^4.1.1",
+		"uuid": "^8.3.2",
 		"webpack": "^5.14.0"
 	},
 	"devDependencies": {
